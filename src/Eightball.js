@@ -15,25 +15,43 @@ import getRandomIdx from "./random"
  */
 
 function Eightball({answers = list}){
-    const [ball, setBall] = useState({msg: "Think of a Question", color: "black"})
+    const initialBall = {msg: "Think of a Question", color: "black"}
+    const [ball, setBall] = useState(initialBall)
+    const [records, setRecords] = useState({green:0, red:0, goldenrod:0})
 
     function handleClick(){
-        setBall(answers[getRandomIdx(answers)])
+        const newAnswer = answers[getRandomIdx(answers)]
+        setBall(newAnswer)
+        
+        const newRecords = records;
+        newRecords[newAnswer.color] = records[newAnswer.color] + 1;
+        setRecords(newRecords)
     }
 
+    function reset(){
+        setBall(initialBall)
+    }
+
+
     const ballStyle = {
-        borderRadius: "50%", 
+        borderRadius: "50%",
         backgroundColor: ball.color,
         color: "white",
         height: "100px",
         width: "100px",
         display: "flex",
-        alignItems: "center"
+        alignItems: "center",
     }
 
     return (
-        <div style={ballStyle} onClick={handleClick}>
-            <p>{ball.msg}</p>
+        <div>
+            <div style={ballStyle} onClick={handleClick}>
+                <p>{ball.msg}</p>
+            </div>
+            <p>greens = {records.green}</p>
+            <p>reds = {records.red}</p>
+            <p>yellows = {records.goldenrod}</p>
+            <button onClick={reset}>Reset</button>
         </div>
     )
 }
